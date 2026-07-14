@@ -14,6 +14,9 @@ AI Based Resume Generator is a full-stack web application that turns a plain-Eng
 
 ## Tech Stack
 
+
+
+
 **Frontend:** React, Vite, Tailwind CSS, DaisyUI, React Hook Form, Axios, jsPDF, html-to-image
 
 **Backend:** Java 21, Spring Boot, Spring AI, Ollama, Maven
