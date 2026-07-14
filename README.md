@@ -4,7 +4,6 @@ AI Based Resume Generator is a full-stack web application that turns a plain-Eng
 
 ## Features
 
-
 - Generate resume content from a natural-language profile description
 - Review and edit personal details, summary, skills, experience, education, certifications, projects, achievements, languages, and interests
 - Export the generated resume as a PDF
@@ -13,10 +12,6 @@ AI Based Resume Generator is a full-stack web application that turns a plain-Eng
 - REST API backend built with Spring Boot
 
 ## Tech Stack
-
-
-
-
 
 **Frontend:** React, Vite, Tailwind CSS, DaisyUI, React Hook Form, Axios, jsPDF, html-to-image
 
