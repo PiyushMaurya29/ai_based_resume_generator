@@ -1,8 +1,23 @@
-# React + Vite
+# Resume Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for AI Based Resume Generator.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+npm install
+npm run dev
+```
+
+Create a `.env` file when the backend is not running on `http://localhost:8080`:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+## Scripts
+
+- `npm run dev` starts the development server
+- `npm run build` creates a production build
+- `npm run lint` runs ESLint
+- `npm run preview` previews the production build

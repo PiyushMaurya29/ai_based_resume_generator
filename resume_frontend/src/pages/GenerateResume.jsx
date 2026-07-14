@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaBrain, FaTrash, FaPaperPlane } from "react-icons/fa";
+import { FaBrain, FaTrash, FaPaperPlane, FaPlusCircle } from "react-icons/fa";
 import { generateResume } from "../api/ResumeService";
 import { BiBook } from "react-icons/bi";
 import { useForm, useFieldArray } from "react-hook-form";
-import { FaPlusCircle } from "react-icons/fa";
 import Resume from "../components/Resume";
 
 const GenerateResume = () => {
@@ -18,11 +17,12 @@ const GenerateResume = () => {
     education: [],
     certifications: [],
     projects: [],
+    achievements: [],
     languages: [],
     interests: [],
   });
 
-  const { register, handleSubmit, control, setValue, reset } = useForm({
+  const { register, handleSubmit, control, reset } = useForm({
     defaultValues: data,
   });
 
@@ -37,14 +37,13 @@ const GenerateResume = () => {
     name: "certifications",
   });
   const projectsFields = useFieldArray({ control, name: "projects" });
+  const achievementsFields = useFieldArray({ control, name: "achievements" });
   const languagesFields = useFieldArray({ control, name: "languages" });
   const interestsFields = useFieldArray({ control, name: "interests" });
   const skillsFields = useFieldArray({ control, name: "skills" });
 
-  //handle form submit
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    setData({ ...data });
+  const onSubmit = (formData) => {
+    setData({ ...formData });
 
     setShowFormUI(false);
     setShowPromptInput(false);
@@ -55,13 +54,18 @@ const GenerateResume = () => {
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
-    console.log(description);
-    // server call to get resume
+    if (!description.trim()) {
+      toast.error("Please enter a resume description.");
+      return;
+    }
 
     try {
       setLoading(true);
       const responseData = await generateResume(description);
-      console.log(responseData);
+      if (!responseData?.data) {
+        throw new Error("Resume data was not returned by the backend.");
+      }
+
       reset(responseData.data);
 
       toast.success("Resume Generated Successfully!", {
@@ -72,7 +76,7 @@ const GenerateResume = () => {
       setShowPromptInput(false);
       setShowResumeUI(false);
     } catch (error) {
-      console.log(error);
+      console.error("Error generating resume:", error);
       toast.error("Error Generating Resume!");
     } finally {
       setLoading(false);
@@ -103,10 +107,7 @@ const GenerateResume = () => {
         {fields.fields.map((field, index) => (
           <div key={field.id} className="p-4 rounded-lg mb-4 bg-base-100">
             {keys.map((key) => (
-              <div key={key}>
-                {console.log(`${name}`)}
-                {renderInput(`${name}.${index}.${key}`, key)}
-              </div>
+              <div key={key}>{renderInput(`${name}.${index}.${key}`, key)}</div>
             ))}
             <button
               type="button"
@@ -153,7 +154,7 @@ const GenerateResume = () => {
                 "tel"
               )}
               {renderInput("personalInformation.location", "Location")}
-              {renderInput("personalInformation.linkedin", "LinkedIn", "url")}
+              {renderInput("personalInformation.linkedIn", "LinkedIn", "url")}
               {renderInput("personalInformation.gitHub", "GitHub", "url")}
               {renderInput("personalInformation.portfolio", "Portfolio", "url")}
             </div>
@@ -194,8 +195,14 @@ const GenerateResume = () => {
               "technologiesUsed",
               "githubLink",
             ])}
+            {renderFieldArray(
+              achievementsFields,
+              "Achievements",
+              "achievements",
+              ["title", "year", "extraInformation"]
+            )}
 
-            <div className="flex gap-3 mt-16  p-4 rounded-xl ">
+            <div className="flex flex-col md:flex-row gap-3 mt-16 p-4 rounded-xl">
               <div className="flex-1">
                 {renderFieldArray(languagesFields, "Languages", "languages", [
                   "name",
@@ -245,6 +252,7 @@ const GenerateResume = () => {
             Generate Resume
           </button>
           <button
+            disabled={loading}
             onClick={handleClear}
             className="btn btn-secondary flex items-center gap-2"
           >
@@ -260,7 +268,8 @@ const GenerateResume = () => {
         <Resume data={data} />
 
         <div className="flex mt-5 justify-center gap-2">
-          <div
+          <button
+            type="button"
             onClick={() => {
               setShowPromptInput(true);
               setShowFormUI(false);
@@ -269,8 +278,9 @@ const GenerateResume = () => {
             className="btn btn-accent"
           >
             Generate Another
-          </div>
-          <div
+          </button>
+          <button
+            type="button"
             onClick={() => {
               setShowPromptInput(false);
               setShowFormUI(true);
@@ -279,7 +289,7 @@ const GenerateResume = () => {
             className="btn btn-success"
           >
             Edit
-          </div>
+          </button>
         </div>
       </div>
     );

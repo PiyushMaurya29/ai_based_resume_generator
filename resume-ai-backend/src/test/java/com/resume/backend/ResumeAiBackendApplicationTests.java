@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class ResumeAiBackendApplicationTests {
@@ -14,9 +14,8 @@ class ResumeAiBackendApplicationTests {
 	private ResumeService resumeService;
 
 	@Test
-	void contextLoads() throws IOException {
-
-		resumeService.generateResumeResponse("I am durgesh tiwari with 2 year of java exp .");
+	void contextLoads() {
+		assertNotNull(resumeService);
 	}
 
 }
